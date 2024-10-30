@@ -1,11 +1,12 @@
 import 'dart:developer';
 import 'dart:ui' as ui;
-import 'dart:typed_data' show Uint8List;
+
+import 'package:archive/archive.dart' as archive;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart' show decodeImageFromList;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:http/http.dart' show get;
-import 'package:archive/archive.dart' as archive;
+
 // ignore: import_of_legacy_library_into_null_safe
 import 'proto/svga.pbserver.dart';
 
@@ -31,18 +32,15 @@ class SVGAParser {
   Future<MovieEntity> decodeFromBuffer(List<int> bytes) {
     TimelineTask? timeline;
     if (!kReleaseMode) {
-      timeline = TimelineTask(filterKey: _filterKey)
-        ..start('DecodeFromBuffer', arguments: {'length': bytes.length});
+      timeline = TimelineTask(filterKey: _filterKey)..start('DecodeFromBuffer', arguments: {'length': bytes.length});
     }
-    final inflatedBytes = archive.ZLibDecoder().decodeBytes(bytes);
+    final inflatedBytes = const archive.ZLibDecoder().decodeBytes(bytes);
     if (timeline != null) {
-      timeline.instant('MovieEntity.fromBuffer()',
-          arguments: {'inflatedLength': inflatedBytes.length});
+      timeline.instant('MovieEntity.fromBuffer()', arguments: {'inflatedLength': inflatedBytes.length});
     }
     final movie = MovieEntity.fromBuffer(inflatedBytes);
     if (timeline != null) {
-      timeline.instant('prepareResources()',
-          arguments: {'images': movie.images.keys.join(',')});
+      timeline.instant('prepareResources()', arguments: {'images': movie.images.keys.join(',')});
     }
     return _prepareResources(
       _processShapeItems(movie),
@@ -53,39 +51,34 @@ class SVGAParser {
   }
 
   MovieEntity _processShapeItems(MovieEntity movieItem) {
-    movieItem.sprites.forEach((sprite) {
+    for (var sprite in movieItem.sprites) {
       List<ShapeEntity>? lastShape;
-      sprite.frames.forEach((frame) {
-        if (frame.shapes.isNotEmpty && frame.shapes.length > 0) {
-          if (frame.shapes[0].type == ShapeEntity_ShapeType.KEEP &&
-              lastShape != null) {
+      for (var frame in sprite.frames) {
+        if (frame.shapes.isNotEmpty && frame.shapes.isNotEmpty) {
+          if (frame.shapes[0].type == ShapeEntity_ShapeType.KEEP && lastShape != null) {
             frame.shapes = lastShape;
           } else if (frame.shapes.isNotEmpty == true) {
             lastShape = frame.shapes;
           }
         }
-      });
-    });
+      }
+    }
     return movieItem;
   }
 
-  Future<MovieEntity> _prepareResources(MovieEntity movieItem,
-      {TimelineTask? timeline}) {
+  Future<MovieEntity> _prepareResources(MovieEntity movieItem, {TimelineTask? timeline}) {
     final images = movieItem.images;
     if (images.isEmpty) return Future.value(movieItem);
     return Future.wait(images.entries.map((item) async {
       // result null means a decoding error occurred
-      final decodeImage = await _decodeImageItem(
-          item.key, Uint8List.fromList(item.value),
-          timeline: timeline);
+      final decodeImage = await _decodeImageItem(item.key, Uint8List.fromList(item.value), timeline: timeline);
       if (decodeImage != null) {
         movieItem.bitmapCache[item.key] = decodeImage;
       }
     })).then((_) => movieItem);
   }
 
-  Future<ui.Image?> _decodeImageItem(String key, Uint8List bytes,
-      {TimelineTask? timeline}) async {
+  Future<ui.Image?> _decodeImageItem(String key, Uint8List bytes, {TimelineTask? timeline}) async {
     TimelineTask? task;
     if (!kReleaseMode) {
       task = TimelineTask(filterKey: _filterKey, parent: timeline)

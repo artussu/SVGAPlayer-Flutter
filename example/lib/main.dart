@@ -1,11 +1,14 @@
 import 'dart:math' as math;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 
-void main() => runApp(ExampleApp());
+void main() => runApp(const ExampleApp());
 
 class ExampleApp extends StatelessWidget {
+  const ExampleApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(theme: ThemeData.dark(), home: HomeScreen());
@@ -37,7 +40,7 @@ class HomeScreen extends StatelessWidget {
     "kingset.svga": (entity) => entity.dynamicItem
       ..setText(
           TextPainter(
-              text: TextSpan(
+              text: const TextSpan(
                   text: "Hello, World!",
                   style: TextStyle(
                     fontSize: 28,
@@ -54,13 +57,15 @@ class HomeScreen extends StatelessWidget {
     // }, "banner"),
   };
 
+  HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('SVGA Flutter Samples')),
+      appBar: AppBar(title: const Text('SVGA Flutter Samples')),
       body: ListView.separated(
           itemCount: samples.length,
-          separatorBuilder: (_, __) => Divider(),
+          separatorBuilder: (_, __) => const Divider(),
           itemBuilder: (context, index) {
             return ListTile(
                 title: Text(samples[index].first),
@@ -72,10 +77,7 @@ class HomeScreen extends StatelessWidget {
 
   void _goToSample(context, List<String> sample) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return SVGASampleScreen(
-          name: sample.first,
-          image: sample.last,
-          dynamicCallback: dynamicSamples[sample.first]);
+      return SVGASampleScreen(name: sample.first, image: sample.last, dynamicCallback: dynamicSamples[sample.first]);
     }));
   }
 }
@@ -84,16 +86,13 @@ class SVGASampleScreen extends StatefulWidget {
   final String? name;
   final String image;
   final void Function(MovieEntity entity)? dynamicCallback;
-  const SVGASampleScreen(
-      {Key? key, required this.image, this.name, this.dynamicCallback})
-      : super(key: key);
+  const SVGASampleScreen({Key? key, required this.image, this.name, this.dynamicCallback}) : super(key: key);
 
   @override
   _SVGASampleScreenState createState() => _SVGASampleScreenState();
 }
 
-class _SVGASampleScreenState extends State<SVGASampleScreen>
-    with SingleTickerProviderStateMixin {
+class _SVGASampleScreenState extends State<SVGASampleScreen> with SingleTickerProviderStateMixin {
   SVGAAnimationController? animationController;
   bool isLoading = true;
   Color backgroundColor = Colors.transparent;
@@ -107,8 +106,8 @@ class _SVGASampleScreenState extends State<SVGASampleScreen>
   @override
   void initState() {
     super.initState();
-    this.animationController = SVGAAnimationController(vsync: this);
-    this._loadAnimation();
+    animationController = SVGAAnimationController(vsync: this);
+    _loadAnimation();
   }
 
   @override
@@ -120,8 +119,8 @@ class _SVGASampleScreenState extends State<SVGASampleScreen>
 
   @override
   void dispose() {
-    this.animationController?.dispose();
-    this.animationController = null;
+    animationController?.dispose();
+    animationController = null;
     super.dispose();
   }
 
@@ -131,12 +130,13 @@ class _SVGASampleScreenState extends State<SVGASampleScreen>
     if (widget.dynamicCallback != null) {
       widget.dynamicCallback!(videoItem);
     }
-    if (mounted)
+    if (mounted) {
       setState(() {
-        this.isLoading = false;
-        this.animationController?.videoItem = videoItem;
+        isLoading = false;
+        animationController?.videoItem = videoItem;
         _playAnimation();
       });
+    }
   }
 
   void _playAnimation() {
@@ -154,14 +154,13 @@ class _SVGASampleScreenState extends State<SVGASampleScreen>
         children: <Widget>[
           Container(
               padding: const EdgeInsets.all(8.0),
-              child: Text("Url: ${widget.image}",
-                  style: Theme.of(context).textTheme.subtitle2)),
-          if (isLoading) LinearProgressIndicator(),
+              child: Text("Url: ${widget.image}", style: Theme.of(context).textTheme.titleSmall)),
+          if (isLoading) const LinearProgressIndicator(),
           Center(
             child: ColoredBox(
               color: backgroundColor,
               child: SVGAImage(
-                this.animationController!,
+                animationController!,
                 fit: fit,
                 clearsAfterStop: false,
                 allowDrawingOverflow: allowOverflow,
@@ -177,9 +176,7 @@ class _SVGASampleScreenState extends State<SVGASampleScreen>
           ? null
           : FloatingActionButton.extended(
               label: Text(animationController!.isAnimating ? "Pause" : "Play"),
-              icon: Icon(animationController!.isAnimating
-                  ? Icons.pause
-                  : Icons.play_arrow),
+              icon: Icon(animationController!.isAnimating ? Icons.pause : Icons.play_arrow),
               onPressed: () {
                 if (animationController?.isAnimating == true) {
                   animationController?.stop();
@@ -195,14 +192,13 @@ class _SVGASampleScreenState extends State<SVGASampleScreen>
     return Container(
       width: 240,
       color: Colors.black12,
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: SliderTheme(
         data: SliderTheme.of(context).copyWith(
           showValueIndicator: ShowValueIndicator.always,
           trackHeight: 2,
           overlayShape: const RoundSliderOverlayShape(overlayRadius: 10),
-          thumbShape: const RoundSliderThumbShape(
-              enabledThumbRadius: 6, pressedElevation: 4),
+          thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6, pressedElevation: 4),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,15 +209,12 @@ class _SVGASampleScreenState extends State<SVGASampleScreen>
                     hideOptions = !hideOptions;
                   });
                 },
-                icon: hideOptions
-                    ? Icon(Icons.arrow_drop_up)
-                    : Icon(Icons.arrow_drop_down),
+                icon: hideOptions ? const Icon(Icons.arrow_drop_up) : const Icon(Icons.arrow_drop_down),
                 label: Text(hideOptions ? 'Show options' : 'Hide options')),
             AnimatedBuilder(
                 animation: animationController!,
                 builder: (context, child) {
-                  return Text(
-                      'Current frame: ${animationController!.currentFrame + 1}/${animationController!.frames}');
+                  return Text('Current frame: ${animationController!.currentFrame + 1}/${animationController!.frames}');
                 }),
             if (!hideOptions) ...[
               AnimatedBuilder(
@@ -236,15 +229,14 @@ class _SVGASampleScreenState extends State<SVGASampleScreen>
                         if (animationController?.isAnimating == true) {
                           animationController?.stop();
                         }
-                        animationController?.value =
-                            v / animationController!.frames;
+                        animationController?.value = v / animationController!.frames;
                       },
                     );
                   }),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Image filter quality'),
+                  const Text('Image filter quality'),
                   DropdownButton<FilterQuality>(
                     value: filterQuality,
                     onChanged: (FilterQuality? newValue) {
@@ -265,7 +257,7 @@ class _SVGASampleScreenState extends State<SVGASampleScreen>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Allow drawing overflow'),
+                  const Text('Allow drawing overflow'),
                   const SizedBox(width: 8),
                   Switch(
                     value: allowOverflow,
@@ -277,11 +269,11 @@ class _SVGASampleScreenState extends State<SVGASampleScreen>
                   )
                 ],
               ),
-              Text('Container options:'),
+              const Text('Container options:'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(' width:'),
+                  const Text(' width:'),
                   Slider(
                     min: 100,
                     max: MediaQuery.of(context).size.width.roundToDouble(),
@@ -298,7 +290,7 @@ class _SVGASampleScreenState extends State<SVGASampleScreen>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(' height:'),
+                  const Text(' height:'),
                   Slider(
                     min: 100,
                     max: MediaQuery.of(context).size.height.roundToDouble(),
@@ -315,7 +307,7 @@ class _SVGASampleScreenState extends State<SVGASampleScreen>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(' box fit: '),
+                  const Text(' box fit: '),
                   const SizedBox(width: 8),
                   DropdownButton<BoxFit>(
                     value: fit,

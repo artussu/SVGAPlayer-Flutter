@@ -1,4 +1,5 @@
 ///
+import 'dart:convert' as $convert;
 //  Generated code. Do not modify.
 //  source: svga.proto
 //
@@ -6,7 +7,6 @@
 // ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields,deprecated_member_use_from_same_package
 
 import 'dart:core' as $core;
-import 'dart:convert' as $convert;
 import 'dart:typed_data' as $typed_data;
 
 @$core.Deprecated('Use movieParamsDescriptor instead')
@@ -28,14 +28,7 @@ const SpriteEntity$json = const {
   '1': 'SpriteEntity',
   '2': const [
     const {'1': 'imageKey', '3': 1, '4': 1, '5': 9, '10': 'imageKey'},
-    const {
-      '1': 'frames',
-      '3': 2,
-      '4': 3,
-      '5': 11,
-      '6': '.com.opensource.svga.FrameEntity',
-      '10': 'frames'
-    },
+    const {'1': 'frames', '3': 2, '4': 3, '5': 11, '6': '.com.opensource.svga.FrameEntity', '10': 'frames'},
     const {'1': 'matteKey', '3': 3, '4': 1, '5': 9, '10': 'matteKey'},
   ],
 };
@@ -92,14 +85,7 @@ final $typed_data.Uint8List transformDescriptor = $convert.base64Decode(
 const ShapeEntity$json = const {
   '1': 'ShapeEntity',
   '2': const [
-    const {
-      '1': 'type',
-      '3': 1,
-      '4': 1,
-      '5': 14,
-      '6': '.com.opensource.svga.ShapeEntity.ShapeType',
-      '10': 'type'
-    },
+    const {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.com.opensource.svga.ShapeEntity.ShapeType', '10': 'type'},
     const {
       '1': 'shape',
       '3': 2,
@@ -127,22 +113,8 @@ const ShapeEntity$json = const {
       '9': 0,
       '10': 'ellipse'
     },
-    const {
-      '1': 'styles',
-      '3': 10,
-      '4': 1,
-      '5': 11,
-      '6': '.com.opensource.svga.ShapeEntity.ShapeStyle',
-      '10': 'styles'
-    },
-    const {
-      '1': 'transform',
-      '3': 11,
-      '4': 1,
-      '5': 11,
-      '6': '.com.opensource.svga.Transform',
-      '10': 'transform'
-    },
+    const {'1': 'styles', '3': 10, '4': 1, '5': 11, '6': '.com.opensource.svga.ShapeEntity.ShapeStyle', '10': 'styles'},
+    const {'1': 'transform', '3': 11, '4': 1, '5': 11, '6': '.com.opensource.svga.Transform', '10': 'transform'},
   ],
   '3': const [
     ShapeEntity_ShapeArgs$json,
@@ -230,10 +202,7 @@ const ShapeEntity_ShapeStyle$json = const {
     const {'1': 'lineDashIII', '3': 9, '4': 1, '5': 2, '10': 'lineDashIII'},
   ],
   '3': const [ShapeEntity_ShapeStyle_RGBAColor$json],
-  '4': const [
-    ShapeEntity_ShapeStyle_LineCap$json,
-    ShapeEntity_ShapeStyle_LineJoin$json
-  ],
+  '4': const [ShapeEntity_ShapeStyle_LineCap$json, ShapeEntity_ShapeStyle_LineJoin$json],
 };
 
 @$core.Deprecated('Use shapeEntityDescriptor instead')
@@ -286,31 +255,10 @@ const FrameEntity$json = const {
   '1': 'FrameEntity',
   '2': const [
     const {'1': 'alpha', '3': 1, '4': 1, '5': 2, '10': 'alpha'},
-    const {
-      '1': 'layout',
-      '3': 2,
-      '4': 1,
-      '5': 11,
-      '6': '.com.opensource.svga.Layout',
-      '10': 'layout'
-    },
-    const {
-      '1': 'transform',
-      '3': 3,
-      '4': 1,
-      '5': 11,
-      '6': '.com.opensource.svga.Transform',
-      '10': 'transform'
-    },
+    const {'1': 'layout', '3': 2, '4': 1, '5': 11, '6': '.com.opensource.svga.Layout', '10': 'layout'},
+    const {'1': 'transform', '3': 3, '4': 1, '5': 11, '6': '.com.opensource.svga.Transform', '10': 'transform'},
     const {'1': 'clipPath', '3': 4, '4': 1, '5': 9, '10': 'clipPath'},
-    const {
-      '1': 'shapes',
-      '3': 5,
-      '4': 3,
-      '5': 11,
-      '6': '.com.opensource.svga.ShapeEntity',
-      '10': 'shapes'
-    },
+    const {'1': 'shapes', '3': 5, '4': 3, '5': 11, '6': '.com.opensource.svga.ShapeEntity', '10': 'shapes'},
   ],
 };
 
@@ -322,38 +270,10 @@ const MovieEntity$json = const {
   '1': 'MovieEntity',
   '2': const [
     const {'1': 'version', '3': 1, '4': 1, '5': 9, '10': 'version'},
-    const {
-      '1': 'params',
-      '3': 2,
-      '4': 1,
-      '5': 11,
-      '6': '.com.opensource.svga.MovieParams',
-      '10': 'params'
-    },
-    const {
-      '1': 'images',
-      '3': 3,
-      '4': 3,
-      '5': 11,
-      '6': '.com.opensource.svga.MovieEntity.ImagesEntry',
-      '10': 'images'
-    },
-    const {
-      '1': 'sprites',
-      '3': 4,
-      '4': 3,
-      '5': 11,
-      '6': '.com.opensource.svga.SpriteEntity',
-      '10': 'sprites'
-    },
-    const {
-      '1': 'audios',
-      '3': 5,
-      '4': 3,
-      '5': 11,
-      '6': '.com.opensource.svga.AudioEntity',
-      '10': 'audios'
-    },
+    const {'1': 'params', '3': 2, '4': 1, '5': 11, '6': '.com.opensource.svga.MovieParams', '10': 'params'},
+    const {'1': 'images', '3': 3, '4': 3, '5': 11, '6': '.com.opensource.svga.MovieEntity.ImagesEntry', '10': 'images'},
+    const {'1': 'sprites', '3': 4, '4': 3, '5': 11, '6': '.com.opensource.svga.SpriteEntity', '10': 'sprites'},
+    const {'1': 'audios', '3': 5, '4': 3, '5': 11, '6': '.com.opensource.svga.AudioEntity', '10': 'audios'},
   ],
   '3': const [MovieEntity_ImagesEntry$json],
 };
